@@ -129,7 +129,7 @@ def s3_delete_item(event, context):
         response = {
             'statusCode': 200,
             'headers': {'Content-Type': 'application/json','Access-Control-Allow-Origin':'*'},
-            'body': json.dump(ok_response)
+            'body': json.dumps(ok_response)
         }
 
     return response
@@ -141,5 +141,10 @@ def s3_get_thumbnail_urls(event, context):
 
     while 'LastEveluatedKey' in response:
         response = table.scan(ExclusiveStartKey=response['LastEveluatedKey'])
-        
+        data.extend(response['Items'])
 
+    return {
+        'statusCode' : 200,
+        'headers': {'Content-Type' : 'application/json'},
+        'body' : json.dumps(data)
+    }
